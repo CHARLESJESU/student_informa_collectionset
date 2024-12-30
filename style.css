@@ -1,0 +1,514 @@
+html{
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+}
+  body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+           
+            
+        }
+      
+        .img{
+            
+            object-fit: cover;
+            overflow: hidden;
+        }
+        
+   .table-head{
+    text-align: center;
+   }
+  
+  
+.register{
+    padding:15px 25px;
+    border-radius:6px;
+border:none;
+background-image: linear-gradient(to right, #ffb347 0%, #ffcc33  51%, #ffb347  100%);
+            margin: 10px;
+            padding: 15px 45px;
+            text-align: center;
+            text-transform: uppercase;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;            
+           
+           
+            display: block;  
+
+
+         
+         
+
+}
+.register:hover{
+    background-position: right center; /* change the direction of the change here */
+            color: #fff;
+            text-decoration: none;
+}
+.register a{
+    text-decoration: none;
+    font-size: 15px;
+    color:rgb(0, 0, 0);
+}
+.menu {
+    display: flex;
+    background: #000d82; /* Background color of the menu */
+    list-style-type: none;
+    padding: 0;
+    margin: 0; 
+    position: relative;
+}
+
+
+/* Dropdown menu styling */
+.dropdown {
+    list-style-type: none;
+    display: none; /* Hide dropdown by default */
+    position: absolute;
+    background-color: #ffffff; /* Background color for dropdown */
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Shadow for dropdown */
+    z-index: 1000; /* Ensure dropdown is above other content */
+    min-width: 200px; /* Minimum width for the dropdown */
+}
+
+.menu-item:hover .dropdown {
+    display: block; /* Show dropdown on hover */
+}
+
+/* Styling for dropdown items */
+.dropdown li {
+    padding: 5px 10px; /* Reduced padding for dropdown items */
+    line-height: 1.5; /* Adjust line height for dropdown items */
+}
+
+.dropdown li a {
+    color: black; /* Text color for dropdown items */
+    display: block; /* Ensures the entire area is clickable */
+    padding: 5px 0; /* Additional padding to adjust height */
+}
+
+.dropdown li:hover {
+    background-color: #f2f2f2; /* Background color on hover for dropdown items */
+}
+
+.head{
+    text-align: center;
+    padding:10px;
+    font-size: 35px;
+
+margin:20px;
+}
+.text-content{
+    text-align: justify;
+    padding:0px 40px;
+    font-size: 21px;
+    
+    line-height: 40px;
+    margin:0px 30px;
+}
+
+
+.image-section {
+            position: relative;
+            height: 400px; /* Adjust as needed */
+            background-image: url('rit.jpeg'); /* Replace with your image */
+            background-size: cover;
+            background-position: center;
+            display:flex;
+            justify-content:center;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(6, 0, 51, 0.456); /* Adjust opacity */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            text-align: center;
+            padding: 20px; /* Adjust padding for text */
+            box-sizing: border-box;
+            flex-direction: column;
+        }
+    
+
+#undergraduate, #postgraduate, #research {
+            padding: 0 20px;
+            
+            margin: 10px auto; /* Center the box and add margins */
+            width: 80%; /* Reduce the width of the box */
+            /* Optional: add a subtle shadow for better visual separation */
+        }
+#supervisors{
+    padding: 20px;
+            
+            margin: 10px auto; /* Center the box and add margins */
+            width: 60%;
+}
+        .head {
+            color: #333;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table-head {
+            color: #555;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        .course {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .course th, .course td {
+            border: 1px solid #ddd;
+            padding: 13px;
+            text-align: center;
+        }
+
+        .course th {
+            background-color: #000f64;
+            color: #ffffff;
+        }
+
+        .course tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .course tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Specific styles */
+        .course td:nth-child(1) {
+            width: 10%;
+        }
+
+        .course td:nth-child(2) {
+            width: 60%;
+            text-align: left;
+        }
+
+        .course td:nth-child(3) {
+            width: 30%;
+        }
+/* Slider styles */
+
+.office{
+    margin-top:30px;
+}
+.map{
+    margin-right: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    color:white;
+}
+.map iframe{
+    border-radius:10px;
+}
+.slider{
+    /* Adjust the radius as needed */
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    max-width: 500px;
+    max-height: 500px;
+    overflow:hidden;
+    position:relative;
+    user-select: none;
+    border-radius: 2px;
+    flex-basis: 50%;
+}
+
+
+
+.slider-item,.hidden{
+    display:none;
+}
+.active{
+    display: block;
+    animation: fadeAnimation 0.8s;
+}
+.slider-btns {
+    position: absolute;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    top: 50%;
+    padding: 0; /* Remove padding */
+}
+
+.slider-btns button {
+    font-size: 30px;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    width: 40px; /* Adjusted width */
+    height: 40px; /* Adjusted height */
+    color: white;
+    line-height: 40px; /* Adjusted line-height */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider-btns button:first-of-type {
+    margin-left: 0; /* Remove margin */
+}
+
+.slider-btns button:last-of-type {
+    margin-right: 0; /* Remove margin */
+}
+
+@keyframes fadeAnimation {
+    0%{
+        opacity:0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+.dots{
+  
+width:100%;
+height:15px;
+position: absolute;
+bottom:0;
+display: flex;
+align-items: center;
+justify-content: center;
+gap:10px}
+
+.dot{
+    width:30px;
+    height:3px;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+.dot-active{
+    background-color:white
+}
+.staff {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.staff th, .staff td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.staff th {
+    background-color: #000f64;
+    color: #ffffff;
+}
+
+.staff tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.staff tr:hover {
+    background-color: #ddd;
+}
+
+/* Specific styles */
+.staff td:nth-child(1) {
+    width: 10%;
+}
+
+.staff td:nth-child(2) {
+    width: 50%;
+    text-align: left;
+}
+
+.staff td:nth-child(3) {
+    width: 30%;
+}
+.image-text{
+  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.content{
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: justify;
+    line-height: 30px;
+    flex-basis: 50%;
+}
+
+
+
+.address-box a {
+    color: rgb(247, 240, 240); /* Inherit color from the parent element */
+    text-decoration: none; /* Remove underline */
+}
+
+.address-box a:hover {
+    text-decoration: none; /* No underline on hover */
+}
+.container {
+   background: #001a56;; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    display: flex;
+    align-items: center; 
+    justify-content: space-around;
+    margin: 0px 10px;
+    
+ ;/* Align items vertically */
+}
+
+.address-box {
+    padding: 50px;
+    text-align: center;
+    width: 300px;
+}
+
+.address-box h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color:white;
+}
+
+.address-box p {
+    color:white;
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 100;
+}
+
+.address-box strong {
+    display: block;
+    margin-bottom: 5px;
+    color:white;
+}
+
+/*.box{
+    width:80%;
+    margin:auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+     flex-basis: 50%;
+ }
+
+ .img{
+    flex-basis: 50%;
+    margin:auto
+ }
+ .featureimg img{
+    width:80%;
+    border-radius: 10px;
+    margin-bottom: 140px;
+    box-shadow: 4px 5px 10px 5px rgba(0, 0, 0, 0.92);
+    margin-top: 30px;
+ }
+
+*/ 
+
+
+
+
+
+
+.box {
+    display:grid;
+    grid-template-columns: repeat(2,1fr);
+    align-items: center;
+    gap:5rem;
+    margin:30px;
+ 
+    
+}
+
+
+.text-content {
+    margin: 0;
+    padding: 20px; 
+    line-height: 30px;/* Adjust padding as needed */
+}
+
+.img img {
+    width: 100%;
+    height:auto;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 5px 20px 5px;
+}
+
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #000d82;
+    padding: 1em;
+    position: sticky; /* Fix the navbar at the top */
+    top: 0; /* Align it to the top of the page */
+     /* Ensure it spans the full width */
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+}
+
+/*.navbar-left a:hover,
+.navbar-right .button:hover {
+    background-color:#2a95dc;
+    border-radius: 4px;
+}
+*/
+.navbar-right .button {
+    border: none;
+    border-radius: 4px;
+    background-color: #2a95dc;
+    padding:10px;
+}
+
+.navbar-right .button:hover {
+    color: #216897;
+ background: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-right {
+        margin-top: 1em;
+    }
+
+    .navbar a,
+    .navbar-right .button {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 1em 0;
+    }
+}

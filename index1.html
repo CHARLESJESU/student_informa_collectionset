@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #72EDF2 10%, #5151E5 100%);
+            color: #333;
+            margin: 0;
+            background-image: url('rit.jpeg');
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Keep the background fixed */
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            margin: 50px auto; /* Center the form and add top margin */
+            text-align: left;
+            overflow: auto; /* Enable scrolling inside the container if needed */
+        }
+        h2 {
+            color: #5151E5;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: calc(100% - 24px);
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #5151E5;
+            outline: none;
+        }
+        #recaptcha-container {
+            margin-bottom: 15px;
+        }
+        #send, #verify, button {
+            width: 100%;
+            height: 45px;
+            border: none;
+            border-radius: 5px;
+            background-color: #5151E5;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #send:hover, #verify:hover, button:hover {
+            background-color: #72EDF2;
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        .p-conf, .n-conf {
+            display: none;
+            width: calc(100% - 24px);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .p-conf {
+            border: 2px solid #28a745;
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .n-conf {
+            border: 2px solid #dc3545;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Signup</h2>
+        <form action="#" method="post" id="admission-form">
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" required placeholder="Enter Name">
+            </div>
+            <div class="form-group" id="sender">
+                <label for="number">Mobile Number *</label>
+                <input type="text" id="number" required placeholder="Enter Mobile Number">
+                <div id="recaptcha-container"></div>
+                <input type="button" id="send" value="Send OTP" onclick="phoneAuth()">
+            </div>
+            <div id="verifier" style="display: none;">
+                <div class="form-group">
+                    <label for="verificationcode">OTP Code *</label>
+                    <input type="text" id="verificationcode" required placeholder="Enter OTP Code">
+                </div>
+                <input type="button" id="verify" value="Verify" onclick="codeverify()">
+                <div class="p-conf">Number Verified Successfully!</div>
+                <div class="n-conf">Invalid OTP. Please try again.</div>
+            </div>
+          
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="agreement" required> I agree to receive information regarding my submitted application by signing up on Rajalakshmi Institute of Technology*
+                </label>
+            </div>
+            <button type="submit" disabled>SUBMIT</button>
+        </form>
+    </div>
+
+    <!-- Firebase and Phone Verification Script -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6rpb2HccLVlqD0cG055UomtTePFVUoLk",
+            authDomain: "gitotppro.firebaseapp.com",
+            projectId: "gitotppro",
+            storageBucket: "gitotppro.appspot.com",
+            messagingSenderId: "333150931966",
+            appId: "1:333150931966:web:d4467ab4a1367fb6408eaf"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        render();
+
+        // Render reCAPTCHA
+        function render() {
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+            recaptchaVerifier.render();
+        }
+
+        function phoneAuth() {
+            var number = '+91' + document.getElementById('number').value;
+            firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function(confirmationResult) {
+                window.confirmationResult = confirmationResult;
+                coderesult = confirmationResult;
+                document.getElementById('sender').style.display = 'none';
+                document.getElementById('verifier').style.display = 'block';
+                checkFormCompletion();
+            }).catch(function(error) {
+                alert(error.message);
+            });
+        }
+
+        function codeverify() {
+            var code = document.getElementById('verificationcode').value;
+            coderesult.confirm(code).then(function() {
+                document.getElementsByClassName('p-conf')[0].style.display = 'block';
+                document.getElementsByClassName('n-conf')[0].style.display = 'none';
+                document.querySelector('button[type="submit"]').disabled = false;
+                checkFormCompletion();
+            }).catch(function() {
+                document.getElementsByClassName('p-conf')[0].style.display = 'none';
+                document.getElementsByClassName('n-conf')[0].style.display = 'block';
+            });
+        }
+
+        document.querySelectorAll('input, select').forEach(function(input) {
+            input.addEventListener('input', checkFormCompletion);
+        });
+
+        function checkFormCompletion() {
+            const isFormComplete = document.getElementById('name').value.trim() !== '' &&
+                                   document.getElementById('number').value.trim() !== '' &&
+
+                                   document.getElementById('agreement').checked &&
+                                   document.querySelector('.p-conf').style.display === 'block';
+
+            document.querySelector('button[type="submit"]').disabled = !isFormComplete;
+        }
+
+        document.getElementById('admission-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const number = document.getElementById('number').value;
+         
+
+            // Save data to Firestore
+            db.collection('LoginId').doc(number).set({
+                name: name,
+                mobileNumber: number,
+       
+            }).then(() => {
+                alert('Signin Successfully!');
+                window.location.href = 'regis.html'; // Redirect to regis.html page
+            }).catch((error) => {
+                console.error('Error writing document: ', error);
+            });
+        });
+
+    </script>
+</body>
+</html>

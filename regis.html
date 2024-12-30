@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - College</title>
+    
+
+    <!-- Firebase App and Firestore -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "Your_api_key",
+  authDomain: "your_authdomain",
+  projectId: "your_projectId",
+  storageBucket: "Your-storagebucket",
+  messagingSenderId: "your_messaid",
+  appId: "your_appid"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Function to save data to Firestore with email as document ID
+        async function saveRegistrationData(formData) {
+            try {
+                // Use email as the document ID
+                const docRef = doc(db, "registrations", formData.email);
+                await setDoc(docRef, formData);
+                alert("Registration successful with email: " + formData.email);
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        }
+
+        // Function to upload file to Firebase Storage
+        async function uploadFile(file, storagePath) {
+            if (file.size > 204800) { // 200KB limit
+                alert("File size must be under 200KB.");
+                throw new Error("File size exceeds 200KB limit.");
+            }
+
+            const fileRef = ref(storage, storagePath);
+            try {
+                await uploadBytes(fileRef, file);
+                console.log("File uploaded successfully to", storagePath);
+            } catch (error) {
+                console.error("Error uploading file: ", error);
+                throw error;
+            }
+        }
+
+        // Function to validate file size
+        function validateFileSize(fileInput) {
+            const file = fileInput.files[0];
+            if (file && file.size > 204800) { // 200KB limit
+                alert("File size must be under 200KB.");
+                fileInput.value = ''; // Clear the file input
+            }
+        }
+
+        // Event listener for form submission
+        document.addEventListener('DOMContentLoaded', function () {
+            const registrationForm = document.querySelector('.registration-form');
+            const tenthMarksheetInput = document.getElementById('tenth-marksheet');
+            const twelfthMarksheetInput = document.getElementById('twelfth-marksheet');
+            const aadharMarksheetInput = document.getElementById('aadhar-marksheet');
+            const panMarksheetInput = document.getElementById('pan-marksheet');
+            const tcMarksheetInput = document.getElementById('tc-marksheet');
+            const incomeMarksheetInput = document.getElementById('income-marksheet');
+            const communityMarksheetInput = document.getElementById('community-marksheet');
+            
+
+            // Add event listeners for file inputs
+            tenthMarksheetInput.addEventListener('change', function() {
+                validateFileSize(tenthMarksheetInput);
+            });
+
+            twelfthMarksheetInput.addEventListener('change', function() {
+                validateFileSize(twelfthMarksheetInput);
+            });
+            aadharMarksheetInput.addEventListener('change', function() {
+                validateFileSize(aadharMarksheetInput);
+            });
+            panMarksheetInput.addEventListener('change', function() {
+                validateFileSize(panMarksheetInput);
+            });
+            tcMarksheetInput.addEventListener('change', function() {
+                validateFileSize(tcMarksheetInput);
+            });
+        incomeMarksheetInput.addEventListener('change', function() {
+                validateFileSize(incomeMarksheetInput);
+            });
+            communityMarksheetInput.addEventListener('change', function() {
+                validateFileSize(communityMarksheetInput);
+            });
+          
+            registrationForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                // Get form data
+                const formData = {
+                    firstName: document.getElementById('first-name').value,
+                    middleName: document.getElementById('middle-name').value,
+                    lastName: document.getElementById('last-name').value,
+                    dob: document.getElementById('dob').value,
+                    age: document.getElementById('age').value,
+                    gender: document.getElementById('gender').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('country-code').value + document.getElementById('phone').value,
+                    whatsapp: document.getElementById('whatsapp').value,
+                    address: document.getElementById('address').value,
+                    permanentAddress: document.getElementById('permanent-address').value,
+                    aadhar: document.getElementById('aadhar').value,
+                    pan: document.getElementById('pan').value,
+                    bloodGroup: document.getElementById('blood-group').value,
+                    motherTongue: document.getElementById('mother-tongue').value,
+                    citizenship: document.getElementById('citizenship').value,
+                    community: document.getElementById('community').value,
+                    religion: document.getElementById('religion').value,
+                    tenthMedium: document.getElementById('tenth-medium').value,
+                    tenthBoard: document.getElementById('tenth-board').value,
+                    tenthTotalMarks: document.getElementById('tenth-total-marks').value,
+                    tenthMathsMarks: document.getElementById('tenth-maths-marks').value,
+                    tenthScienceMarks: document.getElementById('tenth-science-marks').value,
+                    tenthPercentage: document.getElementById('tenth-percentage').value,
+                    twelfthMedium: document.getElementById('twelfth-medium').value,
+                    twelfthBoard: document.getElementById('twelfth-board').value,
+                    twelfthTotalMarks: document.getElementById('twelfth-total-marks').value,
+                    twelfthMathsMarks: document.getElementById('twelfth-maths-marks').value,
+                    twelfthPhysicsMarks: document.getElementById('twelfth-physics-marks').value,
+                    twelfthChemistryMarks: document.getElementById('twelfth-chemistry-marks').value,
+                    twelfthPercentage: document.getElementById('twelfth-percentage').value,
+                    hostelDayScholar: document.getElementById('hostel-day-scholar').value,
+                    busBoardingPoint: document.getElementById('bus-boarding-point').value,
+                    roomType: document.getElementById('room-type').value,
+                    roomAc: document.getElementById('room-ac').value,
+                    managementCounselling: document.getElementById('management-counselling').value,
+                    counsellingNumber: document.getElementById('counselling-number').value,
+                    allottedProgram: document.getElementById('allotted-program').value,
+                    interestedCourse: document.getElementById('interested-course').value,
+                    fatherFirstName: document.getElementById('father-first-name').value,
+                    fatherMiddleName: document.getElementById('father-middle-name').value,
+                    fatherLastName: document.getElementById('father-last-name').value,
+                    fatherOccupation: document.getElementById('father-occupation').value,
+                    fatherCompanyAddress: document.getElementById('father-company-address').value,
+                    fatherAnnualIncome: document.getElementById('father-annual-income').value,
+                    fatherEmail: document.getElementById('father-email').value,
+                    fatherPhone: document.getElementById('father-phone').value,
+                    fatherWhatsapp: document.getElementById('father-whatsapp').value,
+                    fatherAadhar: document.getElementById('father-aadhar').value,
+                    fatherPan: document.getElementById('father-pan').value,
+                    fatherVoterId: document.getElementById('father-voter-id').value,
+                    
+                    motherFirstName: document.getElementById('mother-first-name').value,
+                    motherMiddleName: document.getElementById('mother-middle-name').value,
+                    motherLastName: document.getElementById('mother-last-name').value,
+                    motherOccupation: document.getElementById('mother-occupation').value,
+                    motherCompanyAddress: document.getElementById('mother-company-address').value,
+                    motherAnnualIncome: document.getElementById('mother-annual-income').value,
+                    motherEmail: document.getElementById('mother-email').value,
+                    motherPhone: document.getElementById('mother-phone').value,
+                    motherWhatsapp: document.getElementById('mother-whatsapp').value,
+                    motherAadhar: document.getElementById('mother-aadhar').value,
+                    motherPan: document.getElementById('mother-pan').value,
+                    motherVoterId: document.getElementById('mother-voter-id').value,
+                    
+                };
+
+                // Get files
+                const tenthMarksheet = document.getElementById('tenth-marksheet').files[0];
+                const twelfthMarksheet = document.getElementById('twelfth-marksheet').files[0];
+                const aadharMarksheet = document.getElementById('aadhar-marksheet').files[0];
+                const panMarksheet = document.getElementById('pan-marksheet').files[0];
+                const tcMarksheet = document.getElementById('tc-marksheet').files[0];
+                const incomeMarksheet = document.getElementById('income-marksheet').files[0];
+                const communityMarksheet = document.getElementById('community-marksheet').files[0];
+                 
+
+                // Upload files to Firebase Storage with the first name in the file path
+                try {
+                    await uploadFile(tenthMarksheet, `marksheets/10th/${formData.firstName}_10th_marksheet.pdf`);
+                    await uploadFile(twelfthMarksheet, `marksheets/12th/${formData.firstName}_12th_marksheet.pdf`);
+                    await uploadFile(aadharMarksheet, `marksheets/aadhar/${formData.firstName}aadhar_marksheet.pdf`);
+                    await uploadFile(panMarksheet, `marksheets/pan/${formData.firstName}pan_marksheet.pdf`);
+                    await uploadFile(tcMarksheet, `marksheets/tc/${formData.firstName}tc_marksheet.pdf`);
+                    await uploadFile(incomeMarksheet, `marksheets/income/${formData.firstName}income_marksheet.pdf`);
+                    await uploadFile(communityMarksheet, `marksheets/community/${formData.firstName}community_marksheet.pdf`);
+                    
+
+                    // Save data to Firestore
+                    await saveRegistrationData(formData);
+
+                    // Reset the form
+                    registrationForm.reset();
+                } catch (error) {
+                    console.error("Error during form submission: ", error);
+                }
+            });
+        });
+    </script>
+    <style>
+        
+            body {
+    font-family: Arial, sans-serif;
+    background-image: url('rit.jpeg');
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+    .submit-button{
+        padding:10px 15px;
+        border-radius:8px;
+        border:none;
+        background: #25aa01;
+        color:white;
+        cursor:pointer;
+    }
+.submit-button:hover{
+    background: #41c221;
+}
+    .form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.936);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .registration-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+       
+    }
+ 
+
+    .form-label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: rgba(255, 255, 255, 0.9);
+        box-sizing: border-box;
+        transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        border-color: #0073e6;
+        outline: none;
+        background-color: #fff;
+    }
+
+    
+
+    .phone-group {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .phone-input {
+        display: flex;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .phone-input select,
+    .phone-input input {
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .phone-input select {
+        background-color: #f9f9f9;
+        border-right: 1px solid #ccc;
+        border-radius: 4px 0 0 4px;
+    }
+
+    .phone-input input {
+        border-radius: 0 4px 4px 0;
+        width: 100%;
+    }
+   
+
+    .submit-btn {
+        background-color: #0073e6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        align-self: center;
+    }
+
+    .submit-btn:hover {
+        background-color: #005bb5;
+    }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>College Registration</h1>
+        <form class="registration-form">
+            <!-- Personal Information -->
+             <h3>Student Information</h3>
+            <div class="form-group">
+                <label for="first-name" class="form-label">First Name:</label>
+                <input type="text" id="first-name" name="first-name" placeholder="Enter First Name" required>
+            </div>
+            <div class="form-group">
+                <label for="middle-name" class="form-label">Middle Name (optional):</label>
+                <input type="text" id="middle-name" name="middle-name" placeholder="Middle Name">
+            </div>
+            <div class="form-group">
+                <label for="last-name" class="form-label">Last Name:</label>
+                <input type="text" id="last-name" name="last-name" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <label for="dob" class="form-label">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="age" class="form-label">Age:</label>
+                <input type="number" id="age" name="age" placeholder="Enter your Age" required>
+                 
+                
+            </div>
+            <div class="form-group">
+                <label for="gender" class="form-label">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label">Email ID:</label>
+                <input type="email" id="email" name="email" placeholder="Enter E-mail ID" required>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="form-label">Mobile Number:</label>
+                <div class="phone-input">
+                    <select id="country-code" name="country-code">
+                        <option value="+91">+91 (India)</option>
+                         
+                       
+                        <!-- Add more country codes as needed -->
+                    </select>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="whatsapp" class="form-label">WhatsApp Number:</label>
+                <input type="tel" id="whatsapp" name="whatsapp" placeholder="Whatsapp Number">
+            </div>
+            <div class="form-group">
+                <label for="address" class="form-label">Address for Communication:</label>
+                <textarea id="address" name="address" placeholder="Enter Address" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="permanent-address" class="form-label">Permanent Address:</label>
+                <textarea id="permanent-address" name="permanent-address" placeholder="Enter Permanent Address" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="blood-group" class="form-label">Blood Group:</label>
+                <input type="text" id="blood-group" name="blood-group" placeholder="Enter Blood Group" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-tongue" class="form-label">Mother Tongue:</label>
+                <input type="text" id="mother-tongue" name="mother-tongue" placeholder="Enter Mother Tongue" required>
+            </div>
+            <div class="form-group">
+                <label for="citizenship" class="form-label">Citizenship:</label>
+                <input type="text" id="citizenship" name="citizenship" placeholder="Enter Citizenship" required>
+            </div>
+            <div class="form-group">
+                <label for="community" class="form-label">Community:</label>
+                <input type="text" id="community" name="community" placeholder="Enter Community" required>
+            </div>
+            <div class="form-group">
+                <label for="religion" class="form-label">Religion:</label>
+                <input type="text" id="religion" name="religion" placeholder="Enter Religion" required>
+            </div>
+  
+            <!-- 10th Marksheet -->
+         <h3>10th Details</h3>
+            <div class="form-group">
+                <label for="tenth-medium" class="form-label">10th Medium of Study:</label>
+                <select id="tenth-medium" name="tenth-medium" required>
+                    <option value="">Select Medium</option>
+                    <option value="tamil">Tamil</option>
+                    <option value="english">English</option>
+                    <option value="hindi">Hindi</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tenth-board" class="form-label">10th Board of Study:</label>
+                <select id="tenth-board" name="tenth-board" required>
+                    <option value="">Select Board</option>
+                    <option value="cbse">CBSE</option>
+                    <option value="state-board">State Board</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tenth-total-marks" class="form-label">10th Total Marks:</label>
+                <input type="number" id="tenth-total-marks" name="tenth-total-marks" placeholder="Enter your Mark" required>
+            </div>
+            <div class="form-group">
+                <label for="tenth-maths-marks" class="form-label">10th Maths Marks:</label>
+                <input type="number" id="tenth-maths-marks" name="tenth-maths-marks" placeholder="Enter your Mark" required>
+            </div>
+            <div class="form-group">
+                <label for="tenth-science-marks" class="form-label">10th Science Marks:</label>
+                <input type="number" id="tenth-science-marks" name="tenth-science-marks" placeholder="Enter your Mark" required>
+            </div>
+            <div class="form-group">
+                <label for="tenth-percentage" class="form-label">10th Total Marks Percentage:</label>
+                <input type="number" id="tenth-percentage" name="tenth-percentage" placeholder="Enter your Mark Percentage" required>
+            </div>
+                   
+            <!-- 12th Marksheet -->
+        <h3>12th Details</h3>
+            <div class="form-group">
+                <label for="twelfth-medium" class="form-label">12th Medium of Study:</label>
+                <select id="twelfth-medium" name="twelfth-medium" required>
+                    <option value="">Select Medium</option>
+                    <option value="tamil">Tamil</option>
+                    <option value="english">English</option>
+                    <option value="hindi">Hindi</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-board" class="form-label">12th Board of Study:</label>
+                <select id="twelfth-board" name="twelfth-board" required>
+                    <option value="">Select Board</option>
+                    <option value="cbse">CBSE</option>
+                    <option value="state-board">State Board</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-total-marks" class="form-label">12th Total Marks:</label>
+                <input type="number" id="twelfth-total-marks" name="twelfth-total-marks" placeholder="Enter your Mark" required>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-maths-marks" class="form-label">12th Maths Marks:</label>
+                <input type="number" id="twelfth-maths-marks" name="twelfth-maths-marks" placeholder="Enter your Mark" required>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-science-marks" class="form-label">12th Physics Marks:</label>
+                <input type="number" id="twelfth-physics-marks" name="twelfth-physics-marks" placeholder="Enter your Mark" required>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-science-marks" class="form-label">12th Chemistry Marks:</label>
+                <input type="number" id="twelfth-chemistry-marks" name="twelfth-chemistry-marks" placeholder="Enter your Mark" required>
+            </div>
+          
+            <div class="form-group">
+                <label for="twelfth-percentage" class="form-label">12th Total Marks Percentage:</label>
+                <input type="number" id="twelfth-percentage" name="twelfth-percentage" placeholder="Enter your Mark" required>
+            </div>
+            <div class="form-group">
+                <label for="aadhar" class="form-label">Aadhar Number:</label>
+                <input type="text" id="aadhar" name="aadhar" placeholder="Enter Aadhar Number" required>
+            </div>
+            <div class="form-group">
+                <label for="pan" class="form-label">PAN Number (if available):</label>
+                <input type="text" id="pan" name="pan" placeholder="Enter PAN Number">
+            </div>
+          
+
+            <!-- Hostel/Day Scholar Information -->
+            <div class="form-group">
+                <label for="hostel-day-scholar" class="form-label">Want to join as:</label>
+                <select id="hostel-day-scholar" name="hostel-day-scholar" required>
+                    <option value="">Select Option</option>
+                    <option value="hosteller">Hosteller</option>
+                    <option value="day-scholar">Day Scholar</option>
+                </select>
+            </div>
+            <div id="day-scholar-info" class="additional-info" style="display: none;">
+                <div class="form-group">
+                    <label for="bus-boarding-point" class="form-label">Bus Boarding Point:</label>
+                    <input type="text" id="bus-boarding-point" name="bus-boarding-point" placeholder="Main Bus Stop">
+                </div>
+            </div>
+            <div id="hosteller-info" class="additional-info" style="display: none;">
+                <div class="form-group">
+                    <label for="room-type" class="form-label">Room Type:</label>
+                    <select id="room-type" name="room-type" required>
+                        <option value="">Select Room Type</option>
+                        <option value="sharing-room">Sharing Room</option>
+                        <option value="sharing-room-ac">Sharing Room with AC</option>
+                        <option value="single-room">Single Room</option>
+                        <option value="single-room-ac">Single Room with AC</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="room-ac" class="form-label">AC in Room:</label>
+                    <select id="room-ac" name="room-ac" required>
+                        <option value="">Select AC Option</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Management/Counselling Information -->
+            <div class="form-group">
+                <label for="management-counselling" class="form-label">Management/Counselling:</label>
+                <input type="text" id="management-counselling" name="management-counselling" placeholder="Counselling Details" required>
+            </div>
+            <div class="form-group">
+                <label for="counselling-number" class="form-label">Counselling Allotment Number:</label>
+                <input type="text" id="counselling-number" name="counselling-number" placeholder="Enter Allotment Number" required>
+            </div>
+            <div class="form-group">
+                <label for="allotted-program" class="form-label">Allotted Program:</label>
+                <input type="text" id="allotted-program" name="allotted-program" placeholder="Enter Allotted Course" required>
+            </div>
+            <div class="form-group">
+                <label for="interested-course" class="form-label">Interested in Course:</label>
+                <select id="interested-course" name="interested-course" required>
+                    <option value="">Select Course</option>
+                    <option value="cse">Computer Science Engineering</option>
+                    <option value="ece">Electronics and Communication Engineering</option>
+                    <option value="bio-tech">Biotechnology</option>
+                    <option value="cyber-security">Cyber Security</option>
+                    <option value="it">Information Technology</option>
+                    <option value="aids">AIDS</option>
+                    <option value="aiml">AI & ML</option>
+                </select>
+            </div>
+            <h3>Uploaded Certificates</h3>
+            <div class="form-group">
+                <label for="tenth-marksheet" class="form-label">10th Marksheet PDF:</label>
+                <input type="file" id="tenth-marksheet" name="tenth-marksheet" accept="application/pdf" required>
+                <small>File size must be under 200KB.</small>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-marksheet" class="form-label">12th Marksheet PDF:</label>
+                <input type="file" id="twelfth-marksheet" name="twelfth-marksheet" accept="application/pdf" required>
+                <small>File size must be under 200KB.</small>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-marksheet" class="form-label">Aadhar pdf:</label>
+                <input type="file" id="aadhar-marksheet" name="aadhar-marksheet" accept="application/pdf" required>
+                <small>File size must be under 200KB.</small>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-marksheet" class="form-label">Pan pdf:</label>
+                <input type="file" id="pan-marksheet" name="pan-marksheet" accept="application/pdf" required>
+                <small>File size must be under 200KB.</small>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-marksheet" class="form-label">TC pdf:</label>
+                <input type="file" id="tc-marksheet" name="tc-marksheet" accept="application/pdf" required>
+                <small>File size must be under 200KB.</small>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-marksheet" class="form-label">Income pdf:</label>
+                <input type="file" id="income-marksheet" name="income-marksheet" accept="application/pdf" required>
+                <small>File size must be under 200KB.</small>
+            </div>
+            <div class="form-group">
+                <label for="twelfth-marksheet" class="form-label">Community pdf:</label>
+                <input type="file" id="community-marksheet" name="community-marksheet" accept="application/pdf" required>
+                <small>File size must be under 200KB.</small>
+            </div>
+      <!-- First Graduate Information -->
+ 
+<!-- Other fields -->
+
+ 
+
+  <h2>Parent's Information</h2>
+            <!-- Father's Information -->
+            <h3>Father's Information</h3>
+            <div class="form-group">
+                <label for="father-first-name" class="form-label">First Name:</label>
+                <input type="text" id="father-first-name" name="father-first-name" placeholder="Enter Father's name" required>
+            </div>
+            <div class="form-group">
+                <label for="father-middle-name" class="form-label">Middle Name (optional):</label>
+                <input type="text" id="father-middle-name" name="father-middle-name" placeholder="Middle Name">
+            </div>
+            <div class="form-group">
+                <label for="father-last-name" class="form-label">Last Name:</label>
+                <input type="text" id="father-last-name" name="father-last-name" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <label for="father-occupation" class="form-label">Occupation:</label>
+                <input type="text" id="father-occupation" name="father-occupation" placeholder="Enter Occupation" required>
+            </div>
+            <div class="form-group">
+                <label for="father-company-address" class="form-label">Company Address:</label>
+                <textarea id="father-company-address" name="father-company-address" placeholder="Company Address" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="father-annual-income" class="form-label">Annual Income:</label>
+                <input type="number" id="father-annual-income" name="father-annual-income" placeholder="Enter Annual Income" required>
+            </div>
+            <div class="form-group">
+                <label for="father-email" class="form-label">Email:</label>
+                <input type="email" id="father-email" name="father-email" placeholder="abc@gmai.com" required>
+            </div>
+            <div class="form-group">
+                <label for="father-phone" class="form-label">Phone Number:</label>
+                <input type="tel" id="father-phone" name="father-phone" placeholder="Enter Phone Number" required>
+            </div>
+            <div class="form-group">
+                <label for="father-whatsapp" class="form-label">WhatsApp Number:</label>
+                <input type="tel" id="father-whatsapp" name="father-whatsapp" placeholder="Enter Whatsapp Number">
+            </div>
+            <div class="form-group">
+                <label for="father-aadhar" class="form-label">Aadhar Number:</label>
+                <input type="text" id="father-aadhar" name="father-aadhar" placeholder="Enter Aadhar Number" required>
+            </div>
+            <div class="form-group">
+                <label for="father-pan" class="form-label">PAN Number:</label>
+                <input type="text" id="father-pan" name="father-pan" placeholder="Enter PAN number">
+            </div>
+            <div class="form-group">
+                <label for="father-voter-id" class="form-label">Voter ID:</label>
+                <input type="text" id="father-voter-id" name="father-voter-id" placeholder="Enter Voter ID">
+            </div>
+           
+
+            <!-- Mother's Information -->
+            <h3>Mother's Information</h3>
+            <div class="form-group">
+                <label for="mother-first-name" class="form-label">First Name:</label>
+                <input type="text" id="mother-first-name" name="mother-first-name" placeholder="Enter Mother's Name" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-middle-name" class="form-label">Middle Name (optional):</label>
+                <input type="text" id="mother-middle-name" name="mother-middle-name" placeholder="Middle Name">
+            </div>
+            <div class="form-group">
+                <label for="mother-last-name" class="form-label">Last Name:</label>
+                <input type="text" id="mother-last-name" name="mother-last-name" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-occupation" class="form-label">Occupation:</label>
+                <input type="text" id="mother-occupation" name="mother-occupation" placeholder="Enter Occupation" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-company-address" class="form-label">Company Address:</label>
+                <textarea id="mother-company-address" name="mother-company-address" placeholder="Company Address" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="mother-annual-income" class="form-label">Annual Income:</label>
+                <input type="number" id="mother-annual-income" name="mother-annual-income" placeholder="Enter Annual Income" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-email" class="form-label">Email:</label>
+                <input type="email" id="mother-email" name="mother-email" placeholder="abc@gmail.com" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-phone" class="form-label">Phone Number:</label>
+                <input type="tel" id="mother-phone" name="mother-phone" placeholder="Enter Phone Number" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-whatsapp" class="form-label">WhatsApp Number:</label>
+                <input type="tel" id="mother-whatsapp" name="mother-whatsapp" placeholder="Enter Whatsapp Number">
+            </div>
+            <div class="form-group">
+                <label for="mother-aadhar" class="form-label">Aadhar Number:</label>
+                <input type="text" id="mother-aadhar" name="mother-aadhar" placeholder="Enter Aadhar Number" required>
+            </div>
+            <div class="form-group">
+                <label for="mother-pan" class="form-label">PAN Number:</label>
+                <input type="text" id="mother-pan" name="mother-pan" placeholder="Enter PAN Number">
+            </div>
+            <div class="form-group">
+                <label for="mother-voter-id" class="form-label">Voter ID:</label>
+                <input type="text" id="mother-voter-id" name="mother-voter-id" placeholder="Enter Voter ID">
+            </div>
+         
+            <!-- Declaration and Submit -->
+            <div class="form-group">
+                <label for="declaration" class="form-label">Declaration:</label>
+                <textarea id="declaration" name="declaration" placeholder="I hereby declare that the information provided is true to the best of my knowledge." rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="submit-button">Submit</button>
+            </div>
+        </form>
+        <script>
+            document.getElementById('hostel-day-scholar').addEventListener('change', function() {
+                var selectedValue = this.value;
+                document.getElementById('day-scholar-info').style.display = selectedValue === 'day-scholar' ? 'block' : 'none';
+                document.getElementById('hosteller-info').style.display = selectedValue === 'hosteller' ? 'block' : 'none';
+            });
+        </script>
+    </main>
+</body>
+</html>

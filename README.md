@@ -1,1 +1,1 @@
-# student_informa_collectionset
+This project is use to collect the student information from the student for college. we create this website using html css js we use firebase also for storing data and retrieving data we use otp authendication based on the user phone number we get files also from user like aadhar,10th marksheet,etc..

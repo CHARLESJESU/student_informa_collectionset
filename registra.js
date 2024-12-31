@@ -5,12 +5,12 @@
 
  // Your web app's Firebase configuration
  const firebaseConfig = {
-     apiKey: "AIzaSyA6rpb2HccLVlqD0cG055UomtTePFVUoLk",
-authDomain: "gitotppro.firebaseapp.com",
-projectId: "gitotppro",
-storageBucket: "gitotppro.appspot.com",
-messagingSenderId: "333150931966",
-appId: "1:333150931966:web:d4467ab4a1367fb6408eaf"
+     apiKey: "Your_api_key",
+authDomain: "Your_authdomain",
+projectId: "your_projectid",
+storageBucket: "your_storageBucket",
+messagingSenderId: "Your_messid",
+appId: "your_appid"
  };
 
 
